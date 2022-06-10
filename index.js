@@ -2,6 +2,10 @@
 const express = require('express')
 const app = express()
 
+//set env
+require('dotenv').config()
+console.log(process.env.MONGO_URI)
+
 //set dns
 const dns = require('dns')
 
