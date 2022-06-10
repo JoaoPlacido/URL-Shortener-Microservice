@@ -11,8 +11,18 @@
       <h1>URL Shortener Microservice</h1>
     </header>
     <div>
-      <input type="text" placeholder="ex: https://www.google.com/" />
-      <button>Create short link</button>
+      <form action="api/shorturl" method="post">
+        <fieldset>
+          <legend>URL Shortener</legend>
+          <input
+            id="url_input"
+            type="text"
+            placeholder="ex: https://www.google.com/"
+            name="url"
+          />
+          <input type="submit" value="POST URL" />
+        </fieldset>
+      </form>
     </div>
   </body>
 </html>
