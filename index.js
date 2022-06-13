@@ -19,7 +19,7 @@ app.use(cors({ optionsSuccessStatus: 200 }))
 
 //setup  the DB
 const mongoose = require('mongoose')
-const { json } = require('body-parser')
+const mongobd = require('mongobd')
 mongoose.connect(process.env.MONGO_URI)
 
 //def a schema for shortUrl
@@ -76,7 +76,7 @@ app.get('/', (req, res) => {
 })
 
 //Regular expression to http string format
-const httpFormat = new RegExp('https*://w+.')
+const httpFormat = new RegExp('https*://(\\w)+.')
 const httpIni = new RegExp('https*://')
 
 app.post('/api/shorturl', (req, res, next) => {
@@ -100,18 +100,15 @@ app.post('/api/shorturl', (req, res, next) => {
             findMaxShortValue((err, data) => {
               if (err) return next(err)
               //save new SortURL
-              console.log(data.short_url)
-              createAndSaveShortURL(
-                req.body['url'],
-                data.short_url + 1,
-                (err, data) => {
-                  if (err) return next(err)
-                  res.json({
-                    original_url: data.original_url,
-                    short_url: data.short_url
-                  })
-                }
-              )
+              var nextShort = 1
+              if (data) nextShort = data.short_url + 1
+              createAndSaveShortURL(req.body['url'], nextShort, (err, data) => {
+                if (err) return next(err)
+                res.json({
+                  original_url: data.original_url,
+                  short_url: data.short_url
+                })
+              })
             })
           } else {
             //case This URL exist in DB
